@@ -2,8 +2,8 @@ package com.blueeagle.facedetector;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageButton imbGallery, imbCamera;
     private ImageView imvPhoto;
+    private ProgressDialog progressDialog;
 
     static String TAG = "MainActivity";
     static final int RC_HANDLE_CAMERA_PERM = 1;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imbGallery.setOnClickListener(this);
         imbCamera.setOnClickListener(this);
+
+        // Config progress dialog
+        progressDialog = new ProgressDialog(this);
     }
 
     public void initView() {
@@ -227,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return image;
     }
 
+    // Decode bitmap to fit to image view
     public Bitmap decodeBitmap() {
         int targetW = imvPhoto.getWidth();
         int targetH = imvPhoto.getHeight();
@@ -249,24 +254,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return BitmapFactory.decodeFile(mCurrentPhotoPath, bmpOption);
     }
 
-    public Bitmap drawInfoToBitmat(Bitmap originBitmap, Face[] faces) {
+    public Bitmap drawInfoToBitmap(Bitmap originBitmap, Face[] faces) {
         Bitmap bitmap = originBitmap.copy(Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
 
-        paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.parseColor("#9C27B0"));
-        paint.setStrokeWidth(2.0f);
-
         if (faces != null) {
             for (Face face : faces) {
                 FaceRectangle faceRectangle = face.faceRectangle;
-                canvas.drawRect(faceRectangle.left,
+
+                // Config paint to draw a rect
+                paint.setAntiAlias(true);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setColor(Color.parseColor("#9C27B0"));
+                paint.setStrokeWidth(3.0f);
+
+                // Draw a rect
+                canvas.drawRect(
+                        faceRectangle.left,
                         faceRectangle.top,
                         faceRectangle.left + faceRectangle.width,
                         faceRectangle.top + faceRectangle.height,
                         paint);
+
+                // Draw another rect
+                paint.setStyle(Paint.Style.FILL_AND_STROKE);
+                canvas.drawRect(
+                        faceRectangle.left,
+                        faceRectangle.top - 15,
+                        faceRectangle.left + faceRectangle.width,
+                        faceRectangle.top + 20,
+                        paint);
+
+                // Config paint to draw text
+                paint.setColor(Color.WHITE);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setTextSize(16.0f);
+
+                String info = face.faceAttributes.gender + ", " + (int) face.faceAttributes.age;
+                // Draw text
+                canvas.drawText(info, faceRectangle.left + 10, faceRectangle.top + 5, paint);
             }
         }
 
@@ -308,7 +335,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPreExecute() {
-            //TODO: show progress dialog
+            progressDialog.setMessage("Please wait! Detecting...");
+            progressDialog.show();
         }
 
         @Override
@@ -318,14 +346,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Face[] result) {
+            // Hide progress dialog
+            progressDialog.dismiss();
+
+            // Nothing detected or detect failed
             if (result == null)
                 return;
 
-            for (Face face : result) {
-                Log.d(TAG, "Face: " + face.faceId + " - " + face.faceAttributes.age + " - " + face.faceAttributes.gender);
-            }
-
-            Bitmap bitmap = drawInfoToBitmat(imageBitmap, result);
+            Bitmap bitmap = drawInfoToBitmap(imageBitmap, result);
             imvPhoto.setImageBitmap(bitmap);
         }
     }

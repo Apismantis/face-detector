@@ -23,6 +23,27 @@
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_977b8071a61c4463b1ad1996c03306b509e61691/classes.dex" />
     </item>
     <item
+        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_06568ab62cfb98a5c2e83d673d661cb6c7336550/classes.dex" />
+    </item>
+    <item
+        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_dc192079b8725f59673a8f8f2b4ec6da061d3f8d/classes.dex" />
+    </item>
+    <item
+        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_941982cddd6a8210b7c34321d2e4641892e9f36f/classes.dex" />
+    </item>
+    <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
         jumboMode="true"
         revision="24.0.2"
@@ -35,13 +56,6 @@
         revision="24.0.2"
         sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_4c480bfa3d2e7fa00b0e52aa773a573618253eff/classes.dex" />
-    </item>
-    <item
-        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        revision="24.0.2"
-        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_06568ab62cfb98a5c2e83d673d661cb6c7336550/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
@@ -58,25 +72,11 @@
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_4d5db4d1481c5fc2b29b7c35c0107c073b9b5baf/classes.dex" />
     </item>
     <item
-        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.2"
-        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_dc192079b8725f59673a8f8f2b4ec6da061d3f8d/classes.dex" />
-    </item>
-    <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
         jumboMode="true"
         revision="24.0.2"
         sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_cf2d1896c7e83398fd674ea6dd5c2fb23e514f1b/classes.dex" />
-    </item>
-    <item
-        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        revision="24.0.2"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_941982cddd6a8210b7c34321d2e4641892e9f36f/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
@@ -103,14 +103,14 @@
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="4db84f26994eb99a2d1abcd731dc70c78558f0fb">
+        sha1="c4cd200dfe294bd6c1fe5c3a147d86378d9b1edc">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_dbb8295ce5d120799908a5e7220cfead99e61b3e/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="983deac67ba34ff070dd32b3b8227b01d754c676">
+        sha1="eb92e2ae113b9a629490433cefc96ac0bbb07c56">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_6943e748f35a298a2e1e79c1df80dd4a67908567/classes.dex" />
     </item>
     <item

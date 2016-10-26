@@ -9,16 +9,18 @@
 
     <ImageView
         android:id="@+id/imvGender"
-        android:layout_width="25dp"
+        android:layout_width="wrap_content"
         android:src="@drawable/female"
-        android:layout_height="25dp" />
+        android:layout_height="wrap_content"
+        android:contentDescription="G" />
 
     <TextView
-        android:id="@+id/tvGender"
+        android:id="@+id/tvAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:text="Female"
+        android:text="25"
+        android:textSize="20sp"
         android:textColor="@android:color/white" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.blueeagle.facedetector;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -49,13 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
 
     static String TAG = "MainActivity";
-    static final int RC_HANDLE_CAMERA_PERM = 1;
-    static final int RC_HANDLE_STORAGE_PERM = 2;
-    static final int RC_HANDLE_ALL_PERM = 3;
-
-    static boolean RS_HANDLE_CAMERA_PERM = false;
-    static boolean RS_HANDLE_STORAGE_PERM = false;
-    static boolean RS_HANDLE_INTERNET_PERM = false;
+    static final int RC_HANDLE_ALL_PERM = 1;
+    static boolean RS_PERM = false;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_PICK_IMAGE = 2;
@@ -86,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Init view
         initView();
 
-        // Check permission
-        checkPermissions();
-
         // Face client for detector
         String APIKey = getResources().getString(R.string.microsoft_oxford_api_subscription_key);
         faceServiceClient = new FaceServiceRestClient(APIKey);
@@ -105,6 +99,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imbCamera = (ImageButton) findViewById(R.id.imbCamera);
         imbGallery = (ImageButton) findViewById(R.id.imbGallery);
         imvPhoto = (ImageView) findViewById(R.id.imvPhoto);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Check permission
+        RS_PERM = checkPermissions();
+    }
+
+    public boolean checkNetwork() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 
     // Check all permission
@@ -131,40 +138,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     permissionNeedRequest.toArray(new String[permissionNeedRequest.size()]),
                     RC_HANDLE_ALL_PERM);
 
+            Log.d(TAG, "All permission is not granted...");
             return false;
         }
 
         return true;
-    }
-
-    // Request camera permission
-    public void requestCameraPermission() {
-        Log.w(TAG, "Camera permission is not granted. Requesting permission...");
-
-        final String[] cameraPermission = new String[]{Manifest.permission.CAMERA};
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(this, cameraPermission, RC_HANDLE_CAMERA_PERM);
-        }
-    }
-
-    // Request storage permission
-    public void requestStoragePermission() {
-        Log.w(TAG, "Storage permission is not granted. Requesting permission...");
-
-        final String[] storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ActivityCompat.requestPermissions(this, storagePermission, RC_HANDLE_STORAGE_PERM);
-        }
-    }
-
-    // Request storage permission
-    public void requestInternetPermission() {
-        Log.w(TAG, "Internet permission is not granted. Requesting permission...");
-
-        final String[] internetPermission = new String[]{Manifest.permission.INTERNET};
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
-            ActivityCompat.requestPermissions(this, internetPermission, RC_HANDLE_ALL_PERM);
-        }
     }
 
     // Handle result of permission request
@@ -174,25 +152,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                            @NonNull int[] grantResults) {
 
         switch (requestCode) {
-            case RC_HANDLE_CAMERA_PERM:
-                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Camera permission is granted.");
-                    RS_HANDLE_CAMERA_PERM = true;
-                }
-                break;
-
-            case RC_HANDLE_STORAGE_PERM:
-                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Storage permission is granted.");
-                    RS_HANDLE_STORAGE_PERM = true;
-                }
-                break;
-
             case RC_HANDLE_ALL_PERM:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Internet permission is granted.");
-                    RS_HANDLE_INTERNET_PERM = true;
+                    Log.d(TAG, "All permission is granted.");
+                    RS_PERM = true;
+                } else {
+                    RS_PERM = false;
                 }
+
                 break;
 
             default:
@@ -204,13 +171,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int viewId = v.getId();
 
+        if (!RS_PERM && (viewId == R.id.imbCamera || viewId == R.id.imbGallery)) {
+            Toast.makeText(this,
+                    "Face Detector has no permission!. Please grant permission in " +
+                            "Settings -> Application -> Face Detector -> Permissions",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        Log.d(TAG, RS_PERM + "");
+
         switch (viewId) {
             case R.id.imbCamera:
-                takePhoto();
+                if (RS_PERM)
+                    takePhoto();
+
                 break;
 
             case R.id.imbGallery:
-                pickImageFromGallery();
+                if (RS_PERM)
+                    pickImageFromGallery();
+
                 break;
         }
     }
@@ -221,13 +201,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param imageBitmap: Bitmap image
      */
     public void detectFace(Bitmap imageBitmap) {
+        // Check network
+        if (!checkNetwork()) {
+            Toast.makeText(this, "Network is off. Please turn on network connection to continue detecting.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // Create input stream from bitmap
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         // Detect face from input stream
-        new DetectAsyntask().execute(inputStream);
+        new DetectAsyncTask().execute(inputStream);
     }
 
     public void pickImageFromGallery() {
@@ -246,18 +232,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 photoFile = createImageFile();
+
+                if (photoFile != null) {
+                    Uri photoUri = FileProvider.getUriForFile(
+                            this,
+                            "com.example.android.fileprovider",
+                            photoFile);
+
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
             } catch (IOException ex) {
                 Log.e(TAG, "Can't create photo file. " + ex.getMessage());
-            }
-
-            if (photoFile != null) {
-                Uri photoUri = FileProvider.getUriForFile(
-                        this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
     }
@@ -306,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 storgeDir);
 
         mCurrentPhotoPath = image.getAbsolutePath();
+        Log.d(TAG, "Current photo path: " + mCurrentPhotoPath);
         return image;
     }
 
@@ -378,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return bitmap;
     }
 
-    class DetectAsyntask extends AsyncTask<InputStream, String, Face[]> {
+    class DetectAsyncTask extends AsyncTask<InputStream, String, Face[]> {
 
         @Override
         protected Face[] doInBackground(InputStream... params) {

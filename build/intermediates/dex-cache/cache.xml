@@ -117,14 +117,14 @@
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="7b3a0b86cf2292827c53c02fe0be7f2071918e9e">
+        sha1="c75ee5e0f3a8d349d9deb4228bf20f3a7c846af2">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_dbb8295ce5d120799908a5e7220cfead99e61b3e/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="5105ff2f1b0e9f67990bf39a08e23a636b822947">
+        sha1="655e7f667fb9e8787dfcd422e1e3d396f7d1303a">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_6943e748f35a298a2e1e79c1df80dd4a67908567/classes.dex" />
     </item>
     <item

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Face Detector</string>
+    <string name="microsoft_oxford_api_subscription_key">b2f33725aef04a78838b894e7e5fcace</string>
 </resources>

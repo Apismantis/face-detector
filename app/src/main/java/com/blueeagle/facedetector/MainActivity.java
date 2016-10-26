@@ -7,7 +7,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -16,18 +20,21 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
+import com.microsoft.projectoxford.face.FaceServiceClient;
+import com.microsoft.projectoxford.face.FaceServiceRestClient;
+import com.microsoft.projectoxford.face.contract.Face;
+import com.microsoft.projectoxford.face.contract.FaceRectangle;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -42,7 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static final int REQUEST_IMAGE_CAPTURE = 2;
     static final int REQUEST_PICK_IMAGE = 3;
 
-    String mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
+    private Bitmap imageBitmap = null;
+
+    // Face client for detector
+    private FaceServiceClient faceServiceClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Check permission
         checkPermissions();
+
+        // Face client for detector
+        String APIKey = getResources().getString(R.string.microsoft_oxford_api_subscription_key);
+        faceServiceClient = new FaceServiceRestClient(APIKey);
 
         imbGallery.setOnClickListener(this);
         imbCamera.setOnClickListener(this);
@@ -127,7 +142,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param imageBitmap: Bitmap image
      */
     public void detectFace(Bitmap imageBitmap) {
-
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        new DetectAsyntask().execute(inputStream);
     }
 
     public void pickImageFromGallery() {
@@ -168,10 +186,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = decodeBitmap();
-                    if (bitmap != null) {
-                        imvPhoto.setImageBitmap(bitmap);
-                        detectFace(bitmap);
+                    imageBitmap = decodeBitmap();
+                    if (imageBitmap != null) {
+                        imvPhoto.setImageBitmap(imageBitmap);
+                        detectFace(imageBitmap);
                     }
                 }
                 break;
@@ -183,9 +201,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Uri uri = data.getData();
 
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    imvPhoto.setImageBitmap(bitmap);
-                    detectFace(bitmap);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    imvPhoto.setImageBitmap(imageBitmap);
+                    detectFace(imageBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -229,5 +247,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bmpOption.inPurgeable = true;
 
         return BitmapFactory.decodeFile(mCurrentPhotoPath, bmpOption);
+    }
+
+    public Bitmap drawInfoToBitmat(Bitmap originBitmap, Face[] faces) {
+        Bitmap bitmap = originBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.parseColor("#9C27B0"));
+        paint.setStrokeWidth(2.0f);
+
+        if (faces != null) {
+            for (Face face : faces) {
+                FaceRectangle faceRectangle = face.faceRectangle;
+                canvas.drawRect(faceRectangle.left,
+                        faceRectangle.top,
+                        faceRectangle.left + faceRectangle.width,
+                        faceRectangle.top + faceRectangle.height,
+                        paint);
+            }
+        }
+
+        return bitmap;
+    }
+
+    class DetectAsyntask extends AsyncTask<InputStream, String, Face[]> {
+
+        @Override
+        protected Face[] doInBackground(InputStream... params) {
+            try {
+                Log.d(TAG, "Detecting...");
+                FaceServiceClient.FaceAttributeType types[] = new FaceServiceClient.FaceAttributeType[2];
+                types[0] = FaceServiceClient.FaceAttributeType.Age;
+                types[1] = FaceServiceClient.FaceAttributeType.Gender;
+
+                Face[] result = faceServiceClient.detect(
+                        params[0],
+                        true,         // returnFaceId
+                        false,        // returnFaceLandmarks
+                        types          // returnFaceAttributes: a string like "age, gender"
+                );
+
+                if (result == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Detection finished. Nothing detected", Toast.LENGTH_LONG).show();
+                    return null;
+                }
+
+                Log.d(TAG, String.format("Detection Finished. %d face(s) detected", result.length));
+                return result;
+
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(),
+                        "Detect failed. Please try again!", Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //TODO: show progress dialog
+        }
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            //TODO: update progress
+        }
+
+        @Override
+        protected void onPostExecute(Face[] result) {
+            if (result == null)
+                return;
+
+            for (Face face : result) {
+                Log.d(TAG, "Face: " + face.faceId + " - " + face.faceAttributes.age + " - " + face.faceAttributes.gender);
+            }
+
+            Bitmap bitmap = drawInfoToBitmat(imageBitmap, result);
+            imvPhoto.setImageBitmap(bitmap);
+        }
     }
 }

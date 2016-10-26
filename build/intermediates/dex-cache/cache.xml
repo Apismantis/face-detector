@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="/home/apismantis/.gradle/caches/modules-2/files-2.1/com.squareup.haha/haha/2.0.3/640a438d2d415c056ca6a673ac26b183b044e160/haha-2.0.3.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="640a438d2d415c056ca6a673ac26b183b044e160">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/haha-2.0.3_849ce35b40a9ec4469a3e9b07d35c8cd9adde15f/classes.dex" />
+    </item>
+    <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
         jumboMode="true"
         revision="24.0.2"
@@ -49,6 +56,13 @@
         revision="24.0.2"
         sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_0728075c89050e3fa6be292ae2106f0bd672932e/classes.dex" />
+    </item>
+    <item
+        jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/exploded-aar/com.squareup.leakcanary/leakcanary-android/1.5/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="c7a2672b3122b897a0751f327929ae405ea02bf7">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.squareup.leakcanary-leakcanary-android-1.5_701cde71ae3b82cf3d7662198753d53ca79dea23/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
@@ -103,14 +117,14 @@
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="c4cd200dfe294bd6c1fe5c3a147d86378d9b1edc">
+        sha1="7b3a0b86cf2292827c53c02fe0be7f2071918e9e">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_dbb8295ce5d120799908a5e7220cfead99e61b3e/classes.dex" />
     </item>
     <item
         jar="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.2"
-        sha1="eb92e2ae113b9a629490433cefc96ac0bbb07c56">
+        sha1="5105ff2f1b0e9f67990bf39a08e23a636b822947">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_6943e748f35a298a2e1e79c1df80dd4a67908567/classes.dex" />
     </item>
     <item
@@ -133,6 +147,20 @@
         revision="24.0.2"
         sha1="d5c731fc64c03dfe04d51134955b483551c35849">
         <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_5e6862a3daf90ebd47bf6ba347f0ba389c3ae17a/classes.dex" />
+    </item>
+    <item
+        jar="/home/apismantis/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-analyzer/1.5/3277b0b0c2ace34a2edb5ddf9d1f67829561fb8f/leakcanary-analyzer-1.5.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="3277b0b0c2ace34a2edb5ddf9d1f67829561fb8f">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/leakcanary-analyzer-1.5_4eab4d62947a63e71f37ec8096c2d7c2921ce35b/classes.dex" />
+    </item>
+    <item
+        jar="/home/apismantis/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-watcher/1.5/288101b16513158c2923ad3fb6161d1452b65e73/leakcanary-watcher-1.5.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="288101b16513158c2923ad3fb6161d1452b65e73">
+        <dex dex="/home/apismantis/AndroidStudioProjects/face-detector/app/build/intermediates/transforms/dex/debug/folders/1000/10/leakcanary-watcher-1.5_86f1d1ae62ca40b18548624817a34b484f510755/classes.dex" />
     </item>
 
 </items>

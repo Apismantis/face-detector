@@ -1,7 +1,6 @@
 package com.blueeagle.facedetector;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,6 +28,8 @@ import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FaceRectangle;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -36,7 +37,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,8 +50,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static String TAG = "MainActivity";
     static final int RC_HANDLE_CAMERA_PERM = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 2;
-    static final int REQUEST_PICK_IMAGE = 3;
+    static final int RC_HANDLE_STORAGE_PERM = 2;
+    static final int RC_HANDLE_ALL_PERM = 3;
+
+    static boolean RS_HANDLE_CAMERA_PERM = false;
+    static boolean RS_HANDLE_STORAGE_PERM = false;
+    static boolean RS_HANDLE_INTERNET_PERM = false;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_PICK_IMAGE = 2;
 
     private String mCurrentPhotoPath;
     private Bitmap imageBitmap = null;
@@ -56,10 +66,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Face client for detector
     private FaceServiceClient faceServiceClient;
 
+    // Detect leak memory
+    private RefWatcher refWatcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Leak-canary is in analyzing
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            Log.d(TAG, "Leak-canary is in analyzing...");
+            return;
+        }
+
+        // Install Leak-canary
+        refWatcher = LeakCanary.install(getApplication());
 
         // Init view
         initView();
@@ -78,51 +100,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog = new ProgressDialog(this);
     }
 
+    // Init view
     public void initView() {
         imbCamera = (ImageButton) findViewById(R.id.imbCamera);
         imbGallery = (ImageButton) findViewById(R.id.imbGallery);
         imvPhoto = (ImageView) findViewById(R.id.imvPhoto);
     }
 
-    public void checkPermissions() {
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc != PackageManager.PERMISSION_GRANTED)
-            requestCameraPermission();
+    // Check all permission
+    public boolean checkPermissions() {
+        String[] requestPermission = new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE};
+
+        List<String> permissionNeedRequest = new ArrayList<>();
+        int rs;
+
+        for (String permission : requestPermission) {
+            rs = ActivityCompat.checkSelfPermission(this, permission);
+            if (rs != PackageManager.PERMISSION_GRANTED)
+                permissionNeedRequest.add(permission);
+        }
+
+        if (!permissionNeedRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionNeedRequest.toArray(new String[permissionNeedRequest.size()]),
+                    RC_HANDLE_ALL_PERM);
+
+            return false;
+        }
+
+        return true;
     }
 
+    // Request camera permission
     public void requestCameraPermission() {
         Log.w(TAG, "Camera permission is not granted. Requesting permission...");
 
         final String[] cameraPermission = new String[]{Manifest.permission.CAMERA};
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             ActivityCompat.requestPermissions(this, cameraPermission, RC_HANDLE_CAMERA_PERM);
-            return;
         }
-
-        final Activity thisActivity = this;
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Request camera permission onClick",
-                        Toast.LENGTH_LONG).show();
-
-                ActivityCompat.requestPermissions(thisActivity, cameraPermission, RC_HANDLE_CAMERA_PERM);
-            }
-        };
     }
 
+    // Request storage permission
+    public void requestStoragePermission() {
+        Log.w(TAG, "Storage permission is not granted. Requesting permission...");
+
+        final String[] storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(this, storagePermission, RC_HANDLE_STORAGE_PERM);
+        }
+    }
+
+    // Request storage permission
+    public void requestInternetPermission() {
+        Log.w(TAG, "Internet permission is not granted. Requesting permission...");
+
+        final String[] internetPermission = new String[]{Manifest.permission.INTERNET};
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+            ActivityCompat.requestPermissions(this, internetPermission, RC_HANDLE_ALL_PERM);
+        }
+    }
+
+    // Handle result of permission request
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
 
-        if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Camera permission is granted.");
-            return;
-        }
+        switch (requestCode) {
+            case RC_HANDLE_CAMERA_PERM:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Camera permission is granted.");
+                    RS_HANDLE_CAMERA_PERM = true;
+                }
+                break;
 
-        Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
-                " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+            case RC_HANDLE_STORAGE_PERM:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Storage permission is granted.");
+                    RS_HANDLE_STORAGE_PERM = true;
+                }
+                break;
+
+            case RC_HANDLE_ALL_PERM:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Internet permission is granted.");
+                    RS_HANDLE_INTERNET_PERM = true;
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -131,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (viewId) {
             case R.id.imbCamera:
-                dispatchTakePictureIntent();
+                takePhoto();
                 break;
 
             case R.id.imbGallery:
@@ -146,9 +221,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param imageBitmap: Bitmap image
      */
     public void detectFace(Bitmap imageBitmap) {
+        // Create input stream from bitmap
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+        // Detect face from input stream
         new DetectAsyntask().execute(inputStream);
     }
 
@@ -159,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // Open camera then take a photo
-    public void dispatchTakePictureIntent() {
+    public void takePhoto() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -356,5 +434,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = drawInfoToBitmap(imageBitmap, result);
             imvPhoto.setImageBitmap(bitmap);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Watch leak memory
+        refWatcher.watch(this);
+
+        super.onDestroy();
     }
 }

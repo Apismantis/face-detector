@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,7 +26,6 @@ import android.widget.Toast;
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import com.microsoft.projectoxford.face.contract.Face;
-import com.microsoft.projectoxford.face.contract.FaceRectangle;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -89,9 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imbGallery.setOnClickListener(this);
         imbCamera.setOnClickListener(this);
-
-        // Config progress dialog
-        progressDialog = new ProgressDialog(this);
     }
 
     // Init view
@@ -203,19 +196,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void detectFace(Bitmap imageBitmap) {
         // Check network
         if (!checkNetwork()) {
-            Toast.makeText(this, "Network is off. Please turn on network connection to continue detecting.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Network is off. Please turn on " +
+                    "network connection to continue detecting.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Create input stream from bitmap
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        try {
+            // Create input stream from bitmap
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
-        // Detect face from input stream
-        new DetectAsyncTask().execute(inputStream);
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Please wait! Detecting...");
+            progressDialog.show();
+
+            // Detect face from input stream
+            new DetectAsyncTask().execute(inputStream);
+
+            // Close output stream
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    // Pick an image from gallery
     public void pickImageFromGallery() {
         Intent pickPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         pickPhotoIntent.setType("image/*");
@@ -254,7 +262,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
-                    imageBitmap = decodeBitmap();
+                    if (imageBitmap != null)
+                        BitmapHelper.recycleBitmap(imageBitmap);
+
+                    imageBitmap = ExifUtil.rotateBitmap(
+                            mCurrentPhotoPath,
+                            DecoderBitmap.decodeBitmap(mCurrentPhotoPath, imvPhoto.getWidth(), imvPhoto.getHeight()));
+
                     if (imageBitmap != null) {
                         imvPhoto.setImageBitmap(imageBitmap);
                         detectFace(imageBitmap);
@@ -263,19 +277,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case REQUEST_PICK_IMAGE:
-                if (resultCode != RESULT_OK)
-                    break;
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
 
-                Uri uri = data.getData();
+                    if (imageBitmap != null)
+                        BitmapHelper.recycleBitmap(imageBitmap);
 
-                try {
-                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    imageBitmap = DecoderBitmap.scaleBitmap(
+                            DecoderBitmap.readBitmap(this, uri, imvPhoto.getWidth(), imvPhoto.getHeight()),
+                            imvPhoto.getWidth(),
+                            imvPhoto.getHeight());
+
                     imvPhoto.setImageBitmap(imageBitmap);
                     detectFace(imageBitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-
                 break;
         }
 
@@ -296,75 +311,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return image;
     }
 
-    // Decode bitmap to fit to image view
-    public Bitmap decodeBitmap() {
-        int targetW = imvPhoto.getWidth();
-        int targetH = imvPhoto.getHeight();
-
-        BitmapFactory.Options bmpOption = new BitmapFactory.Options();
-        bmpOption.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmpOption);
-
-        int photoW = bmpOption.outWidth;
-        int photoH = bmpOption.outHeight;
-
-        // Caculate scale ratio
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the view
-        bmpOption.inJustDecodeBounds = false;
-        bmpOption.inSampleSize = scaleFactor;
-        bmpOption.inPurgeable = true;
-
-        return BitmapFactory.decodeFile(mCurrentPhotoPath, bmpOption);
-    }
-
-    public Bitmap drawInfoToBitmap(Bitmap originBitmap, Face[] faces) {
-        Bitmap bitmap = originBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-
-        if (faces != null) {
-            for (Face face : faces) {
-                FaceRectangle faceRectangle = face.faceRectangle;
-
-                // Config paint to draw a rect
-                paint.setAntiAlias(true);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setColor(Color.parseColor("#9C27B0"));
-                paint.setStrokeWidth(3.0f);
-
-                // Draw a rect
-                canvas.drawRect(
-                        faceRectangle.left,
-                        faceRectangle.top,
-                        faceRectangle.left + faceRectangle.width,
-                        faceRectangle.top + faceRectangle.height,
-                        paint);
-
-                // Draw another rect
-                paint.setStyle(Paint.Style.FILL_AND_STROKE);
-                canvas.drawRect(
-                        faceRectangle.left,
-                        faceRectangle.top - 15,
-                        faceRectangle.left + faceRectangle.width,
-                        faceRectangle.top + 20,
-                        paint);
-
-                // Config paint to draw text
-                paint.setColor(Color.WHITE);
-                paint.setStyle(Paint.Style.FILL);
-                paint.setTextSize(16.0f);
-
-                String info = face.faceAttributes.gender + ", " + (int) face.faceAttributes.age;
-                // Draw text
-                canvas.drawText(info, faceRectangle.left + 10, faceRectangle.top + 5, paint);
-            }
-        }
-
-        return bitmap;
-    }
-
     class DetectAsyncTask extends AsyncTask<InputStream, String, Face[]> {
 
         @Override
@@ -379,29 +325,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         params[0],
                         true,         // returnFaceId
                         false,        // returnFaceLandmarks
-                        types          // returnFaceAttributes: a string like "age, gender"
+                        types         // returnFaceAttributes: a string like "age, gender"
                 );
 
                 if (result == null) {
-                    Toast.makeText(getApplicationContext(),
-                            "Detection finished. Nothing detected", Toast.LENGTH_LONG).show();
+                    showToast("Detection finished. Nothing detected");
                     return null;
                 }
 
-                Log.d(TAG, String.format("Detection Finished. %d face(s) detected", result.length));
+                showToast(String.format(Locale.US, "Detection Finished. %d face(s) detected", result.length));
                 return result;
 
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(),
-                        "Detect failed. Please try again!", Toast.LENGTH_LONG).show();
+                showToast("Detect failed. Please try again!");
                 return null;
             }
         }
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Please wait! Detecting...");
-            progressDialog.show();
+            //TODO: .......
         }
 
         @Override
@@ -412,21 +355,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(Face[] result) {
             // Hide progress dialog
+            progressDialog.setCancelable(true);
             progressDialog.dismiss();
 
             // Nothing detected or detect failed
             if (result == null)
                 return;
 
-            Bitmap bitmap = drawInfoToBitmap(imageBitmap, result);
+            Bitmap bitmap = BitmapHelper.drawFaceInfoToBitmap(imageBitmap, result);
             imvPhoto.setImageBitmap(bitmap);
+        }
+
+        public void showToast(final String message) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
     @Override
     protected void onDestroy() {
+        if (imageBitmap != null)
+            BitmapHelper.recycleBitmap(imageBitmap);
+
         // Watch leak memory
-        refWatcher.watch(this);
+        // refWatcher.watch(this);
 
         super.onDestroy();
     }

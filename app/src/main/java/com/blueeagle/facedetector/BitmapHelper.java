@@ -1,11 +1,9 @@
 package com.blueeagle.facedetector;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.provider.Settings;
 
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FaceRectangle;
@@ -61,8 +59,9 @@ public class BitmapHelper {
     }
 
     public static void recycleBitmap(Bitmap bitmap) {
-        bitmap.recycle();
-        System.gc();
+        if (bitmap != null) {
+            bitmap.recycle();
+            System.gc();
+        }
     }
-
 }

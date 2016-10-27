@@ -29,7 +29,9 @@
             </meta-data>
         </provider>
 
-        <activity android:name="com.blueeagle.facedetector.MainActivity">
+        <activity
+            android:name="com.blueeagle.facedetector.MainActivity"
+            android:hardwareAccelerated="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

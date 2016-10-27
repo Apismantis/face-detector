@@ -22,9 +22,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ea02296-a386-4e3a-9fa1-8d935b6e2c62" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" />
@@ -34,9 +31,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
     </list>
     <ignored path="face-detector.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,16 +78,21 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1176472">
-              <caret line="215" column="55" selection-start-line="215" selection-start-column="55" selection-end-line="215" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.33481154">
+              <caret line="208" column="46" selection-start-line="208" selection-start-column="46" selection-end-line="208" selection-end-column="46" />
               <folding>
-                <element signature="e#2527#2599#0" expanded="true" />
+                <element signature="e#2564#2636#0" expanded="true" />
                 <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+                <element signature="e#3303#3304#0" expanded="true" />
+                <element signature="e#3359#3360#0" expanded="true" />
                 <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+                <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
               </folding>
             </state>
@@ -100,23 +103,10 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="48" column="51" selection-start-line="48" selection-start-column="51" selection-end-line="48" selection-end-column="51" />
+              <caret line="71" column="35" selection-start-line="71" selection-start-column="35" selection-end-line="71" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_main.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.016129">
-              <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -125,18 +115,10 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExifUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
-              <folding />
+              <caret line="65" column="5" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1901,13 +1883,13 @@
         <option value="$PROJECT_DIR$/app/build/intermediates/manifests/full/debug/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/face_info_layout.xml" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/xml/file_paths.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java" />
       </list>
     </option>
   </component>
@@ -1919,27 +1901,7 @@
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Correctness &gt; Messages</id>
-          </State>
-          <State>
-            <id>Manifest</id>
-          </State>
-          <State>
-            <id>Spelling</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Android</id>
-          </State>
-        </selected-state>
-      </profile-state>
+      <profile-state />
     </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -2184,7 +2146,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="android.project.structure.last.selected" value="SDK Location" />
     <property name="android.project.structure.proportion" value="0.15" />
@@ -2495,12 +2457,18 @@
       <option name="project" value="LOCAL" />
       <updated>1477497114106</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Scale bitmap, decode bitmap to avoid OutOfMemory exception">
+      <created>1477542609012</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1477542609012</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1867" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34120172" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2508,7 +2476,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.639485" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.639485" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26688632" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2548,18 +2516,11 @@
     <MESSAGE value="Show face's info for each face in image" />
     <MESSAGE value="Request all permission" />
     <MESSAGE value="Fix crash when open camera, fix request permission" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix crash when open camera, fix request permission" />
+    <MESSAGE value="Scale bitmap, decode bitmap to avoid OutOfMemory exception" />
+    <option name="LAST_COMMIT_MESSAGE" value="Scale bitmap, decode bitmap to avoid OutOfMemory exception" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java</url>
-          <line>40</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
@@ -2570,13 +2531,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2527#2599#0" expanded="true" />
+            <element signature="e#2564#2636#0" expanded="true" />
             <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+            <element signature="e#3303#3304#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
             <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
             <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
             <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
@@ -2595,13 +2561,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="275" column="0" selection-start-line="275" selection-start-column="0" selection-end-line="275" selection-end-column="0" />
           <folding>
-            <element signature="e#2527#2599#0" expanded="true" />
+            <element signature="e#2564#2636#0" expanded="true" />
             <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+            <element signature="e#3303#3304#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
             <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
             <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
             <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
@@ -2647,13 +2618,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2527#2599#0" expanded="true" />
+            <element signature="e#2564#2636#0" expanded="true" />
             <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+            <element signature="e#3303#3304#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
             <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
             <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
             <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
@@ -2707,13 +2683,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="59" column="5" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
           <folding>
-            <element signature="e#2527#2599#0" expanded="true" />
+            <element signature="e#2564#2636#0" expanded="true" />
             <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+            <element signature="e#3303#3304#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
             <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
             <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
             <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
@@ -2798,13 +2779,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.6129032">
           <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.193548">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2817,19 +2791,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java">
+    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-24/android/os/Handler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.903226">
+          <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/ExifUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
-          <folding />
+        <state vertical-scroll-proportion="0.1940133">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2838,8 +2822,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.016129">
-          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+        <state vertical-scroll-proportion="-5.2419353">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2847,7 +2831,17 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/DecoderBitmap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="48" column="51" selection-start-line="48" selection-start-column="51" selection-end-line="48" selection-end-column="51" />
+          <caret line="71" column="35" selection-start-line="71" selection-start-column="35" selection-end-line="71" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/BitmapHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="5" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2856,16 +2850,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/blueeagle/facedetector/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1176472">
-          <caret line="215" column="55" selection-start-line="215" selection-start-column="55" selection-end-line="215" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.33481154">
+          <caret line="208" column="46" selection-start-line="208" selection-start-column="46" selection-end-line="208" selection-end-column="46" />
           <folding>
-            <element signature="e#2527#2599#0" expanded="true" />
+            <element signature="e#2564#2636#0" expanded="true" />
             <element signature="method#initView#0;class#MainActivity#0" expanded="false" />
+            <element signature="e#3303#3304#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
             <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onClick#0;class#MainActivity#0" expanded="false" />
             <element signature="method#pickImageFromGallery#0;class#MainActivity#0" expanded="false" />
             <element signature="method#takePhoto#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#createImageFile#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onProgressUpdate#0;class#DetectAsyncTask#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>

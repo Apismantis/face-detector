@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Detect leak memory
     private RefWatcher refWatcher;
 
+    private ConnectivityManager cm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imbGallery.setOnClickListener(this);
         imbCamera.setOnClickListener(this);
+
+        cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     // Init view
@@ -103,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public boolean checkNetwork() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
 
@@ -202,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         try {
+
             // Create input stream from bitmap
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -218,8 +222,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Close output stream
             outputStream.flush();
             outputStream.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "An error occur. Please try again!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -262,8 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
-                    if (imageBitmap != null)
-                        BitmapHelper.recycleBitmap(imageBitmap);
+                    BitmapHelper.recycleBitmap(imageBitmap);
 
                     imageBitmap = ExifUtil.rotateBitmap(
                             mCurrentPhotoPath,
@@ -279,9 +283,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case REQUEST_PICK_IMAGE:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
-
-                    if (imageBitmap != null)
-                        BitmapHelper.recycleBitmap(imageBitmap);
+                    BitmapHelper.recycleBitmap(imageBitmap);
 
                     imageBitmap = DecoderBitmap.scaleBitmap(
                             DecoderBitmap.readBitmap(this, uri, imvPhoto.getWidth(), imvPhoto.getHeight()),
@@ -293,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
-
     }
 
     public File createImageFile() throws IOException {
@@ -378,8 +379,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        if (imageBitmap != null)
-            BitmapHelper.recycleBitmap(imageBitmap);
+        Log.d(TAG, "onDestroy...");
+
+        BitmapHelper.recycleBitmap(imageBitmap);
+
+        // Release bitmap from imvPhoto
+        imvPhoto.setImageDrawable(null);
 
         // Watch leak memory
         // refWatcher.watch(this);
